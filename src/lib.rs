@@ -114,7 +114,7 @@ mod test_remo_client_rs {
         let json = fs::read_to_string("samples/user.json").unwrap();
         let user: User = serde_json::from_str(&json).unwrap();
 
-        assert_eq!(user.id, "0123456789abcdefg");
+        assert_eq!(user.id, "test_user_0");
         assert_eq!(user.nickname, "Test user");
     }
 
