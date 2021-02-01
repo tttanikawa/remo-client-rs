@@ -1,12 +1,11 @@
-use dotenv::dotenv;
 use reqwest::header;
 use serde::{Deserialize, Serialize};
 // use serde_json::Result;
-use std::{collections::BTreeMap, env};
+use std::collections::BTreeMap;
 
 /// User information
 #[derive(Serialize, Deserialize, Debug)]
-struct User {
+pub struct User {
     id: String,
     nickname: String,
     superuser: Option<bool>,
@@ -14,14 +13,14 @@ struct User {
 
 /// Devices information
 #[derive(Serialize, Deserialize, Debug)]
-struct SensorValue {
+pub struct SensorValue {
     val: f64,
     created_at: String,
 }
 
 /// Devices information
 #[derive(Serialize, Deserialize, Debug)]
-struct Events {
+pub struct Events {
     te: SensorValue,
     hu: SensorValue,
     il: SensorValue,
@@ -30,7 +29,7 @@ struct Events {
 
 /// Devices information
 #[derive(Serialize, Deserialize, Debug)]
-struct Device {
+pub struct Device {
     id: String,
     name: String,
     temperature_offset: i64,
@@ -45,12 +44,12 @@ struct Device {
     users: Vec<User>,
 }
 
-struct Client {
+pub struct Client {
     access_token: String,
 }
 
 impl Client {
-    fn new(access_token: impl Into<String>) -> Self {
+    pub fn new(access_token: impl Into<String>) -> Self {
         Self {
             access_token: access_token.into(),
         }
@@ -78,7 +77,7 @@ impl Client {
         client.request(method, url).headers(header_map).send().await
     }
 
-    async fn get_user(&self) -> Result<User, reqwest::Error> {
+    pub async fn get_user(&self) -> Result<User, reqwest::Error> {
         let response = self
             .request(
                 reqwest::Method::GET,
@@ -92,7 +91,7 @@ impl Client {
         Ok(user)
     }
 
-    async fn get_devices(&self) -> Result<Vec<Device>, reqwest::Error> {
+    pub async fn get_devices(&self) -> Result<Vec<Device>, reqwest::Error> {
         let response = self
             .request(
                 reqwest::Method::GET,
@@ -105,21 +104,4 @@ impl Client {
         let devices: Vec<Device> = serde_json::from_str(response.as_str()).unwrap();
         Ok(devices)
     }
-}
-
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    dotenv().ok();
-
-    let token =
-        env::var("NATURE_REMO_ACCESS_TOKEN").expect("NATURE_REMO_ACCESS_TOKEN is not defined");
-    let client = Client::new(token);
-
-    let user = client.get_user().await?;
-    println!("{:?}", user);
-
-    let devices = client.get_devices().await?;
-    println!("{:?}", devices);
-
-    Ok(())
 }
