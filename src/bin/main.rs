@@ -10,11 +10,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         env::var("NATURE_REMO_ACCESS_TOKEN").expect("NATURE_REMO_ACCESS_TOKEN is not defined");
     let client = Client::new(token);
 
-    let user = client.get_user().await?;
-    println!("{:?}", user);
+    // let user = client.get_user().await?;
+    // println!("{:?}", user);
 
-    let devices = client.get_devices().await?;
-    println!("{:?}", devices);
+    // let devices = client.get_devices().await?;
+    // println!("{:?}", devices);
+
+    let appliances = client.get_appliances().await?;
+    println!("{:?}", appliances);
 
     Ok(())
 }

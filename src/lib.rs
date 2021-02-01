@@ -44,6 +44,156 @@ pub struct Device {
     users: Vec<User>,
 }
 
+/// DevicesCore
+#[derive(Serialize, Deserialize, Debug)]
+pub struct DeviceCore {
+    id: String,
+    name: String,
+    temperature_offset: i64,
+    humidity_offset: i64,
+    created_at: String,
+    updated_at: String,
+    firmware_version: String,
+    mac_address: String,
+    bt_mac_address: String,
+    serial_number: String,
+}
+
+/// Appliance
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Appliance {
+    id: String,
+    device: DeviceCore,
+    model: Option<ApplianceModel>,
+    nickname: String,
+    image: String,
+    #[serde(rename = "type")]
+    app_type: String,
+    settings: Option<AirConParams>,
+    aircon: Option<AirCon>,
+    signals: Vec<Signal>,
+    tv: Option<TV>,
+    light: Option<Light>,
+    smart_meter: Option<SmartMeter>,
+}
+
+/// ApplianceModel
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ApplianceModel {
+    id: String,
+    manufacturer: String,
+    remote_name: String,
+    name: String,
+    image: String,
+    country: String,
+    series: Option<String>,
+}
+
+/// AirConParams
+#[derive(Serialize, Deserialize, Debug)]
+pub struct AirConParams {
+    temp: String,
+    mode: String,
+    vol: String,
+    dir: String,
+    button: String,
+}
+
+/// AirConParams
+#[serde(rename_all = "camelCase")]
+#[derive(Serialize, Deserialize, Debug)]
+pub struct AirCon {
+    range: Range,
+    temp_unit: String,
+}
+
+#[serde(rename_all = "camelCase")]
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Range {
+    modes: Modes,
+    fixed_buttons: Vec<String>,
+}
+
+/// Modes
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Modes {
+    cool: Option<AirConRangeMode>,
+    warm: Option<AirConRangeMode>,
+    dry: Option<AirConRangeMode>,
+    blow: Option<AirConRangeMode>,
+    auto: Option<AirConRangeMode>,
+}
+
+/// AirConRangeMode
+#[derive(Serialize, Deserialize, Debug)]
+pub struct AirConRangeMode {
+    temp: Vec<String>,
+    vol: Vec<String>,
+    dir: Vec<String>,
+    dirh: Vec<String>,
+}
+
+/// Signal
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Signal {
+    id: String,
+    name: String,
+    image: String,
+}
+
+/// TV
+#[derive(Serialize, Deserialize, Debug)]
+pub struct TV {
+    state: TVState,
+    buttons: Vec<Button>,
+}
+
+/// TVState
+#[derive(Serialize, Deserialize, Debug)]
+pub struct TVState {
+    input: String,
+}
+
+/// Button
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Button {
+    name: String,
+    image: String,
+    label: String,
+}
+
+/// Light
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Light {
+    state: LightState,
+    buttons: Vec<Button>,
+}
+
+/// LightState
+#[derive(Serialize, Deserialize, Debug)]
+pub struct LightState {
+    brightness: String,
+    power: String,
+    last_button: String,
+}
+
+/// SmartMeter
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SmartMeter {
+    echonetlite_properties: Vec<EchonetLiteProperty>,
+    power: String,
+    last_button: String,
+}
+
+/// EchonetLiteProperty
+#[derive(Serialize, Deserialize, Debug)]
+pub struct EchonetLiteProperty {
+    name: String,
+    epic: i64,
+    val: String,
+    updated_at: String,
+}
+
 pub struct Client {
     access_token: String,
     base_url: &'static str,
@@ -89,7 +239,7 @@ impl Client {
             .await?
             .text()
             .await?;
-        let user: User = serde_json::from_str(response.as_str()).unwrap();
+        let user: User = serde_json::from_str(&response).unwrap();
         Ok(user)
     }
 
@@ -99,7 +249,23 @@ impl Client {
             .await?
             .text()
             .await?;
-        let devices: Vec<Device> = serde_json::from_str(response.as_str()).unwrap();
+        let devices: Vec<Device> = serde_json::from_str(&response).unwrap();
+        Ok(devices)
+    }
+
+    pub async fn get_appliances(&self) -> Result<Vec<Appliance>, reqwest::Error> {
+        let response = self
+            .request(reqwest::Method::GET, "/appliances", &BTreeMap::new())
+            .await?
+            .text()
+            .await?;
+        let devices: Vec<Appliance> = match serde_json::from_str(&response) {
+            Ok(result) => result,
+            Err(e) => {
+                eprintln!("{:?}", e);
+                vec![]
+            }
+        };
         Ok(devices)
     }
 }
