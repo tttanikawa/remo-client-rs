@@ -46,12 +46,14 @@ pub struct Device {
 
 pub struct Client {
     access_token: String,
+    base_url: &'static str,
 }
 
 impl Client {
     pub fn new(access_token: impl Into<String>) -> Self {
         Self {
             access_token: access_token.into(),
+            base_url: "https://api.nature.global/1",
         }
     }
 
@@ -74,16 +76,16 @@ impl Client {
             map
         };
         let client = reqwest::Client::new();
-        client.request(method, url).headers(header_map).send().await
+        client
+            .request(method, &format!("{}{}", self.base_url, url))
+            .headers(header_map)
+            .send()
+            .await
     }
 
     pub async fn get_user(&self) -> Result<User, reqwest::Error> {
         let response = self
-            .request(
-                reqwest::Method::GET,
-                "https://api.nature.global/1/users/me",
-                &BTreeMap::new(),
-            )
+            .request(reqwest::Method::GET, "/users/me", &BTreeMap::new())
             .await?
             .text()
             .await?;
@@ -93,11 +95,7 @@ impl Client {
 
     pub async fn get_devices(&self) -> Result<Vec<Device>, reqwest::Error> {
         let response = self
-            .request(
-                reqwest::Method::GET,
-                "https://api.nature.global/1/devices",
-                &BTreeMap::new(),
-            )
+            .request(reqwest::Method::GET, "/devices", &BTreeMap::new())
             .await?
             .text()
             .await?;
