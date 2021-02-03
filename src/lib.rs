@@ -203,7 +203,7 @@ impl Client {
     pub fn new(access_token: impl Into<String>) -> Self {
         Self {
             access_token: access_token.into(),
-            base_url: "https://api.nature.global/1",
+            base_url: "https://api.nature.global/",
         }
     }
 
@@ -211,7 +211,6 @@ impl Client {
         &self,
         method: reqwest::Method,
         url: &str,
-        params: &BTreeMap<&str, &str>,
     ) -> Result<reqwest::Response, reqwest::Error> {
         let header_map = {
             let mut map = header::HeaderMap::new();
@@ -221,7 +220,7 @@ impl Client {
             );
             map.insert(
                 header::ACCEPT,
-                header::HeaderValue::from_static("application/json"),
+                header::HeaderValue::from_static("/1/application/json"),
             );
             map
         };
@@ -235,7 +234,7 @@ impl Client {
 
     pub async fn get_user(&self) -> Result<User, reqwest::Error> {
         let response = self
-            .request(reqwest::Method::GET, "/users/me", &BTreeMap::new())
+            .request(reqwest::Method::GET, "/1/users/me")
             .await?
             .text()
             .await?;
@@ -245,7 +244,7 @@ impl Client {
 
     pub async fn get_devices(&self) -> Result<Vec<Device>, reqwest::Error> {
         let response = self
-            .request(reqwest::Method::GET, "/devices", &BTreeMap::new())
+            .request(reqwest::Method::GET, "/1/devices")
             .await?
             .text()
             .await?;
@@ -255,7 +254,7 @@ impl Client {
 
     pub async fn get_appliances(&self) -> Result<Vec<Appliance>, reqwest::Error> {
         let response = self
-            .request(reqwest::Method::GET, "/appliances", &BTreeMap::new())
+            .request(reqwest::Method::GET, "/1/appliances")
             .await?
             .text()
             .await?;
@@ -276,8 +275,7 @@ impl Client {
         let response = self
             .request(
                 reqwest::Method::GET,
-                &format!("/appliances/{}/signals", appliance_id),
-                &BTreeMap::new(),
+                &format!("/1/appliances/{}/signals", appliance_id),
             )
             .await?
             .text()
