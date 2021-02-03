@@ -268,6 +268,29 @@ impl Client {
         };
         Ok(devices)
     }
+
+    pub async fn get_appliance_signals(
+        &self,
+        appliance_id: &str,
+    ) -> Result<Vec<Signal>, reqwest::Error> {
+        let response = self
+            .request(
+                reqwest::Method::GET,
+                &format!("/appliances/{}/signals", appliance_id),
+                &BTreeMap::new(),
+            )
+            .await?
+            .text()
+            .await?;
+        let signals: Vec<Signal> = match serde_json::from_str(&response) {
+            Ok(result) => result,
+            Err(e) => {
+                eprintln!("{:?}", e);
+                vec![]
+            }
+        };
+        Ok(signals)
+    }
 }
 
 #[cfg(test)]
