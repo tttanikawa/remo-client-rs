@@ -23,9 +23,6 @@ impl Client {
     }
 
     pub async fn update_user(&self, nickname: &str) -> Result<User, reqwest::Error> {
-        let mut map = BTreeMap::new();
-        map.insert("nickname", nickname);
-
         let response = self
             .request(
                 reqwest::Method::POST,
