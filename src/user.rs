@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use crate::client::Client;
 use serde::{Deserialize, Serialize};
 
@@ -12,7 +14,7 @@ pub struct User {
 impl Client {
     pub async fn get_user(&self) -> Result<User, reqwest::Error> {
         let response = self
-            .request(reqwest::Method::GET, "/1/users/me")
+            .request(reqwest::Method::GET, "/1/users/me", &BTreeMap::new())
             .await?
             .text()
             .await?;

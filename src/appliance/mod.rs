@@ -5,6 +5,7 @@ mod smart_meter;
 mod tv;
 
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 
 use crate::client::Client;
 use crate::device::DeviceCore;
@@ -47,7 +48,7 @@ pub struct ApplianceModel {
 impl Client {
     pub async fn get_appliances(&self) -> Result<Vec<Appliance>, reqwest::Error> {
         let response = self
-            .request(reqwest::Method::GET, "/1/appliances")
+            .request(reqwest::Method::GET, "/1/appliances", &BTreeMap::new())
             .await?
             .text()
             .await?;
@@ -69,6 +70,7 @@ impl Client {
             .request(
                 reqwest::Method::GET,
                 &format!("/1/appliances/{}/signals", appliance_id),
+                &BTreeMap::new(),
             )
             .await?
             .text()

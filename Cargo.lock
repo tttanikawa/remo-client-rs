@@ -341,6 +341,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "maplit"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "22593015b8df7747861c69c28acd32589fb96c1686369f3b661d12e409d4cf65"
+
+[[package]]
 name = "matches"
 version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -630,6 +636,8 @@ name = "remo-client-rs"
 version = "0.1.0"
 dependencies = [
  "dotenv",
+ "maplit",
+ "percent-encoding",
  "reqwest",
  "serde",
  "serde_json",

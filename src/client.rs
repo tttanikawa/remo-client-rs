@@ -1,4 +1,6 @@
+use crate::util;
 use reqwest::header;
+use std::collections::BTreeMap;
 
 pub struct Client {
     access_token: String,
@@ -17,6 +19,7 @@ impl Client {
         &self,
         method: reqwest::Method,
         url: &str,
+        params: &BTreeMap<&str, &str>,
     ) -> Result<reqwest::Response, reqwest::Error> {
         let header_map = {
             let mut map = header::HeaderMap::new();
@@ -28,12 +31,19 @@ impl Client {
                 header::ACCEPT,
                 header::HeaderValue::from_static("/1/application/json"),
             );
+            map.insert(
+                header::CONTENT_TYPE,
+                header::HeaderValue::from_static("application/x-www-form-urlencoded"),
+            );
             map
         };
+        let body = util::encode_params(&params);
+
         let client = reqwest::Client::new();
         client
             .request(method, &format!("{}{}", self.base_url, url))
             .headers(header_map)
+            .body(body)
             .send()
             .await
     }

@@ -1,6 +1,8 @@
 use crate::client::Client;
 use crate::user::User;
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
+
 /// DevicesCore
 #[derive(Serialize, Deserialize, Debug)]
 pub struct DeviceCore {
@@ -15,6 +17,7 @@ pub struct DeviceCore {
     bt_mac_address: String,
     serial_number: String,
 }
+
 /// Devices information
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Device {
@@ -51,7 +54,7 @@ pub struct Events {
 impl Client {
     pub async fn get_devices(&self) -> Result<Vec<Device>, reqwest::Error> {
         let response = self
-            .request(reqwest::Method::GET, "/1/devices")
+            .request(reqwest::Method::GET, "/1/devices", &BTreeMap::new())
             .await?
             .text()
             .await?;
