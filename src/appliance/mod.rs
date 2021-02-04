@@ -18,31 +18,31 @@ pub use tv::*;
 /// Appliance
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Appliance {
-    id: String,
-    device: DeviceCore,
-    model: Option<ApplianceModel>,
-    nickname: String,
-    image: String,
+    pub id: String,
+    pub device: DeviceCore,
+    pub model: Option<ApplianceModel>,
+    pub nickname: String,
+    pub image: String,
     #[serde(rename = "type")]
-    app_type: String,
-    settings: Option<AirConParams>,
-    aircon: Option<AirCon>,
-    signals: Vec<Signal>,
-    tv: Option<TV>,
-    light: Option<Light>,
-    smart_meter: Option<SmartMeter>,
+    pub app_type: String,
+    pub settings: Option<AirConParams>,
+    pub aircon: Option<AirCon>,
+    pub signals: Vec<Signal>,
+    pub tv: Option<TV>,
+    pub light: Option<Light>,
+    pub smart_meter: Option<SmartMeter>,
 }
 
 /// ApplianceModel
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ApplianceModel {
-    id: String,
-    manufacturer: String,
-    remote_name: String,
-    name: String,
-    image: String,
-    country: String,
-    series: Option<String>,
+    pub id: String,
+    pub manufacturer: String,
+    pub remote_name: String,
+    pub name: String,
+    pub image: String,
+    pub country: String,
+    pub series: Option<String>,
 }
 
 impl Client {

@@ -6,49 +6,49 @@ use std::collections::BTreeMap;
 /// DevicesCore
 #[derive(Serialize, Deserialize, Debug)]
 pub struct DeviceCore {
-    id: String,
-    name: String,
-    temperature_offset: i64,
-    humidity_offset: i64,
-    created_at: String,
-    updated_at: String,
-    firmware_version: String,
-    mac_address: String,
-    bt_mac_address: String,
-    serial_number: String,
+    pub id: String,
+    pub name: String,
+    pub temperature_offset: i64,
+    pub humidity_offset: i64,
+    pub created_at: String,
+    pub updated_at: String,
+    pub firmware_version: String,
+    pub mac_address: String,
+    pub bt_mac_address: String,
+    pub serial_number: String,
 }
 
 /// Devices information
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Device {
-    id: String,
-    name: String,
-    temperature_offset: i64,
-    humidity_offset: i64,
-    created_at: String,
-    updated_at: String,
-    firmware_version: String,
-    mac_address: String,
-    bt_mac_address: String,
-    serial_number: String,
-    newest_events: Events,
-    users: Vec<User>,
+    pub id: String,
+    pub name: String,
+    pub temperature_offset: i64,
+    pub humidity_offset: i64,
+    pub created_at: String,
+    pub updated_at: String,
+    pub firmware_version: String,
+    pub mac_address: String,
+    pub bt_mac_address: String,
+    pub serial_number: String,
+    pub newest_events: Events,
+    pub users: Vec<User>,
 }
 
 /// SensorValue
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SensorValue {
-    val: f64,
-    created_at: String,
+    pub val: f64,
+    pub created_at: String,
 }
 
 /// Events
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Events {
-    te: SensorValue,
-    hu: SensorValue,
-    il: SensorValue,
-    mo: SensorValue,
+    pub te: SensorValue,
+    pub hu: SensorValue,
+    pub il: SensorValue,
+    pub mo: SensorValue,
 }
 
 impl Client {

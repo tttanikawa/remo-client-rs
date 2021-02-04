@@ -4,12 +4,12 @@ use serde::{Deserialize, Serialize};
 /// TV
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TV {
-    state: TVState,
-    buttons: Vec<Button>,
+    pub state: TVState,
+    pub buttons: Vec<Button>,
 }
 
 /// TVState
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TVState {
-    input: String,
+    pub input: String,
 }

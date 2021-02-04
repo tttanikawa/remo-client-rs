@@ -38,8 +38,9 @@ pub struct Modes {
 /// AirConRangeMode
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AirConRangeMode {
-    temp: Vec<String>,
-    vol: Vec<String>,
-    dir: Vec<String>,
-    dirh: Vec<String>,
+    pub temp: Vec<String>,
+    pub vol: Vec<String>,
+    pub dir: Vec<String>,
+    pub dirh: Vec<String>,
+}
 }

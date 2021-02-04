@@ -3,16 +3,16 @@ use serde::{Deserialize, Serialize};
 /// SmartMeter
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SmartMeter {
-    echonetlite_properties: Vec<EchonetLiteProperty>,
-    power: String,
-    last_button: String,
+    pub echonetlite_properties: Vec<EchonetLiteProperty>,
+    pub power: String,
+    pub last_button: String,
 }
 
 /// EchonetLiteProperty
 #[derive(Serialize, Deserialize, Debug)]
 pub struct EchonetLiteProperty {
-    name: String,
-    epic: i64,
-    val: String,
-    updated_at: String,
+    pub name: String,
+    pub epic: i64,
+    pub val: String,
+    pub updated_at: String,
 }

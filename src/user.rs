@@ -6,9 +6,9 @@ use serde::{Deserialize, Serialize};
 /// User information
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User {
-    id: String,
-    nickname: String,
-    superuser: Option<bool>,
+    pub id: String,
+    pub nickname: String,
+    pub superuser: Option<bool>,
 }
 
 impl Client {

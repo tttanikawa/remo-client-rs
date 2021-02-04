@@ -4,14 +4,14 @@ use serde::{Deserialize, Serialize};
 /// Light
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Light {
-    state: LightState,
-    buttons: Vec<Button>,
+    pub state: LightState,
+    pub buttons: Vec<Button>,
 }
 
 /// LightState
 #[derive(Serialize, Deserialize, Debug)]
 pub struct LightState {
-    brightness: String,
-    power: String,
-    last_button: String,
+    pub brightness: String,
+    pub power: String,
+    pub last_button: String,
 }
