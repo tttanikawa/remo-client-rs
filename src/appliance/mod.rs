@@ -84,4 +84,34 @@ impl Client {
         };
         Ok(signals)
     }
+
+    /// Create a new appliance
+    pub async fn create_appliance(
+        &self,
+        nickname: &str,
+        model: Option<&str>,
+        model_type: Option<&str>,
+        device: &str,
+        image: &str,
+    ) -> Result<Appliance, Box<dyn std::error::Error>> {
+        let mut params = maplit::btreemap! {
+            "nickname"=> nickname,
+            "device" => device,
+            "image" => image
+        };
+        if let Some(model) = model {
+            params.insert("model", model);
+        }
+        if let Some(model_type) = model_type {
+            params.insert("model_type", model_type);
+        }
+
+        let response = self
+            .request(reqwest::Method::POST, "/1/appliances", &params)
+            .await?
+            .text()
+            .await?;
+        let appliance: Appliance = serde_json::from_str(&response).unwrap();
+        Ok(appliance)
+    }
 }
