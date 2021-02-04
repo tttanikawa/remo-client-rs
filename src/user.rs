@@ -21,6 +21,23 @@ impl Client {
         let user: User = serde_json::from_str(&response).unwrap();
         Ok(user)
     }
+
+    pub async fn update_user(&self, nickname: &str) -> Result<User, reqwest::Error> {
+        let mut map = BTreeMap::new();
+        map.insert("nickname", nickname);
+
+        let response = self
+            .request(
+                reqwest::Method::POST,
+                "/1/users/me",
+                &maplit::btreemap! {"nickname" => nickname},
+            )
+            .await?
+            .text()
+            .await?;
+        let user: User = serde_json::from_str(&response).unwrap();
+        Ok(user)
+    }
 }
 
 #[cfg(test)]
