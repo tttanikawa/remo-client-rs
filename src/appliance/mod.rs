@@ -114,4 +114,23 @@ impl Client {
         let appliance: Appliance = serde_json::from_str(&response).unwrap();
         Ok(appliance)
     }
+
+    /// Reorder appliances
+    pub async fn reorder_appliances(
+        &self,
+        appliance_ids: &Vec<String>,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let s = appliance_ids.join(",");
+        self.request(
+            reqwest::Method::POST,
+            "/1/appliance_orders",
+            &maplit::btreemap! {
+                "appliances"=> s.as_str()
+            },
+        )
+        .await?
+        .text()
+        .await?;
+        Ok(())
+    }
 }
