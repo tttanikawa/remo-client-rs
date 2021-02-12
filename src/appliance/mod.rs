@@ -133,4 +133,18 @@ impl Client {
         .await?;
         Ok(())
     }
+
+    /// Delete appliance
+    pub async fn delete_appliance(
+        &self,
+        appliance_id: &str,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        self.request(
+            reqwest::Method::POST,
+            &format!("/1/appliances/{}/delete", appliance_id),
+            &BTreeMap::new(),
+        )
+        .await?;
+        Ok(())
+    }
 }
