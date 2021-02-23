@@ -4,6 +4,7 @@ mod light;
 mod smart_meter;
 mod tv;
 
+use maplit::btreemap;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
@@ -146,5 +147,28 @@ impl Client {
         )
         .await?;
         Ok(())
+    }
+
+    /// Update appliance
+    pub async fn update_appliance(
+        &self,
+        appliance_id: &str,
+        image: &str,
+        nickname: &str,
+    ) -> Result<Appliance, Box<dyn std::error::Error>> {
+        let response = self
+            .request(
+                reqwest::Method::POST,
+                &format!("/1/appliances/{}", appliance_id),
+                &btreemap! {
+                    "image" => image,
+                    "nickname" => nickname
+                },
+            )
+            .await?
+            .text()
+            .await?;
+        let appliance: Appliance = serde_json::from_str(&response).unwrap();
+        Ok(appliance)
     }
 }
