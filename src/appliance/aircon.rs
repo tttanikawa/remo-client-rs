@@ -4,36 +4,36 @@ use serde::{Deserialize, Serialize};
 /// AirConParams
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AirConParams {
-    temp: String,
-    mode: String,
-    vol: String,
-    dir: String,
-    button: String,
+    pub temp: Option<String>,
+    pub mode: Option<String>,
+    pub vol: Option<String>,
+    pub dir: Option<String>,
+    pub button: Option<String>,
 }
 
 /// AirConParams
 #[serde(rename_all = "camelCase")]
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AirCon {
-    range: Range,
-    temp_unit: String,
+    pub range: Range,
+    pub temp_unit: String,
 }
 
 #[serde(rename_all = "camelCase")]
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Range {
-    modes: Modes,
-    fixed_buttons: Vec<String>,
+    pub modes: Modes,
+    pub fixed_buttons: Vec<String>,
 }
 
 /// Modes
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Modes {
-    cool: Option<AirConRangeMode>,
-    warm: Option<AirConRangeMode>,
-    dry: Option<AirConRangeMode>,
-    blow: Option<AirConRangeMode>,
-    auto: Option<AirConRangeMode>,
+    pub cool: Option<AirConRangeMode>,
+    pub warm: Option<AirConRangeMode>,
+    pub dry: Option<AirConRangeMode>,
+    pub blow: Option<AirConRangeMode>,
+    pub auto: Option<AirConRangeMode>,
 }
 
 /// AirConRangeMode
