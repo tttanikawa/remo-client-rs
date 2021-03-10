@@ -79,4 +79,43 @@ impl Client {
         let response: ApplianceModelAndParam = serde_json::from_str(&response).unwrap();
         Ok(response)
     }
+
+    /// Update air conditioner settings
+    pub async fn update_air_con_settings(
+        &self,
+        appliance_id: &str,
+        ac_params: &AirConParams,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let params = {
+            let mut params = maplit::btreemap! {};
+            if let Some(temp) = &ac_params.temp {
+                params.insert("temperature", temp.as_str());
+            }
+            if let Some(mode) = &ac_params.mode {
+                params.insert("operation_mode", mode.as_str());
+            }
+            if let Some(vol) = &ac_params.vol {
+                params.insert("air_volume", vol.as_str());
+            }
+            if let Some(dir) = &ac_params.dir {
+                params.insert("air_direction", dir.as_str());
+            }
+            if let Some(button) = &ac_params.button {
+                params.insert("button", button.as_str());
+            }
+            params
+        };
+        let status = self
+            .request(
+                reqwest::Method::POST,
+                &format!("/1/appliances/{}/aircon_settings", appliance_id),
+                &params,
+            )
+            .await?
+            .error_for_status();
+        match status {
+            Ok(_) => Ok(()),
+            Err(err) => Err(Box::new(err)),
+        }
+    }
 }
